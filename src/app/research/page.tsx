@@ -1,69 +1,52 @@
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import { Reveal, RevealLine } from '@/components/Motion';
 import { research } from '@/lib/data';
+
+const sections = [
+  { label: 'The Problem', content: research.problem },
+  { label: 'The Approach', content: research.approach },
+  { label: 'The Outcome', content: research.outcome },
+];
 
 export default function ResearchPage() {
   return (
     <>
       <Nav />
-      <main className="min-h-screen bg-cream">
+      <main className="min-h-screen bg-ink">
         <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
-          <header className="mb-12">
-            <h1 className="font-display text-3xl font-bold text-stone-800 mb-3">
-              Research
-            </h1>
-            <p className="font-body text-stone-500">
-              Exploring ideas at the edge of what's possible.
-            </p>
-          </header>
 
-          <article>
-            <div className="mb-8">
-              <div className="flex items-baseline gap-4 mb-2">
-                <h2 className="font-display text-2xl font-medium text-stone-800">
-                  {research.title}
-                </h2>
-                <span className="font-body text-sm text-stone-400">
-                  {research.period}
-                </span>
+          <Reveal>
+            <header className="mb-16">
+              <p className="label-amber mb-4">Research</p>
+              <h1 className="font-display text-5xl font-bold text-bone mb-4 leading-tight">
+                Quantum<br />Semantic Drift
+              </h1>
+              <div className="flex items-center gap-4">
+                <p className="font-body italic text-lg text-ash">
+                  {research.description}
+                </p>
               </div>
-              <p className="font-body text-lg text-stone-600">
-                {research.description}
+              <p className="font-mono text-[10px] text-ash/50 uppercase tracking-[0.15em] mt-3">
+                {research.period}
               </p>
-            </div>
+            </header>
+          </Reveal>
 
-            <div className="space-y-8">
-              <section>
-                <h3 className="font-display text-sm font-semibold text-stone-400 
-                  uppercase tracking-wider mb-3">
-                  The Problem
-                </h3>
-                <p className="font-body text-stone-700 leading-relaxed whitespace-pre-line">
-                  {research.problem}
-                </p>
-              </section>
+          <div className="space-y-12">
+            {sections.map((section, i) => (
+              <RevealLine key={section.label} index={i}>
+                <section>
+                  <p className="label-amber mb-4">{section.label}</p>
+                  <p className="font-body text-[17px] text-ash leading-[1.75]
+                    whitespace-pre-line">
+                    {section.content}
+                  </p>
+                </section>
+              </RevealLine>
+            ))}
+          </div>
 
-              <section>
-                <h3 className="font-display text-sm font-semibold text-stone-400 
-                  uppercase tracking-wider mb-3">
-                  The Approach
-                </h3>
-                <p className="font-body text-stone-700 leading-relaxed whitespace-pre-line">
-                  {research.approach}
-                </p>
-              </section>
-
-              <section>
-                <h3 className="font-display text-sm font-semibold text-stone-400 
-                  uppercase tracking-wider mb-3">
-                  The Outcome
-                </h3>
-                <p className="font-body text-stone-700 leading-relaxed whitespace-pre-line">
-                  {research.outcome}
-                </p>
-              </section>
-            </div>
-          </article>
         </div>
         <Footer />
       </main>

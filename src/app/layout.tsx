@@ -1,20 +1,27 @@
 import type { Metadata } from "next";
-import { Syne, Source_Serif_4 } from "next/font/google";
+import { Syne, Instrument_Serif, DM_Mono } from "next/font/google";
 import "./globals.css";
 
 const syne = Syne({
   subsets: ["latin"],
   variable: "--font-syne",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const sourceSerif = Source_Serif_4({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-source",
+  variable: "--font-instrument",
+  display: "swap",
+  weight: ["400"],
+  style: ["normal", "italic"],
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  variable: "--font-dm-mono",
   display: "swap",
   weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -28,8 +35,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${syne.variable} ${sourceSerif.variable}`}>
-      <body className="bg-cream text-stone-800 antialiased selection:bg-terracotta/20">
+    <html
+      lang="en"
+      className={`${syne.variable} ${instrumentSerif.variable} ${dmMono.variable}`}
+    >
+      <body className="bg-ink text-bone antialiased">
         {children}
       </body>
     </html>

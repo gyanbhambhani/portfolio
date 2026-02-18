@@ -8,54 +8,73 @@
   }
 
   body {
-    @apply font-body;
+    @apply font-body bg-ink text-bone antialiased;
   }
 
   ::selection {
-    background: rgba(180, 108, 92, 0.2);
+    background: rgba(196, 129, 59, 0.3);
   }
 }
 
+/* Subtle film grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url(
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"
+  );
+  background-repeat: repeat;
+  background-size: 300px 300px;
+}
+
 @layer components {
-  .link-hover {
+  /* Animated underline for links */
+  .link-line {
     @apply relative;
+    transition: color 0.2s ease;
   }
 
-  .link-hover::after {
+  .link-line::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-full h-px bg-terracotta;
+    @apply absolute -bottom-px left-0 w-full h-px bg-amber;
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
   }
 
-  .link-hover:hover::after {
+  .link-line:hover::after {
     transform: scaleX(1);
     transform-origin: left;
   }
 
-  .card {
-    @apply bg-white border border-stone-200 rounded-lg p-6;
-    @apply transition-all duration-300;
+  /* Small uppercase monospace label */
+  .label {
+    @apply font-mono text-[10px] uppercase tracking-[0.2em] text-ash;
   }
 
-  .card:hover {
-    @apply border-stone-300 shadow-sm;
+  .label-amber {
+    @apply font-mono text-[10px] uppercase tracking-[0.2em] text-amber;
   }
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-cream;
+  background: #0F0E0C;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-stone-300 rounded-full;
+  background: #2D2923;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-terracotta;
+  background: #C4813B;
 }

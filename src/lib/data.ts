@@ -53,7 +53,7 @@ export const projects: Project[] = [
       completely changed what we built. Also learned that compliance is actually the 
       hardest part of real estate tech.`,
     tech: ['React', 'TypeScript', 'Supabase', 'MCP'],
-    url: 'https://rltr.ai',
+    url: 'https://mano.network',
     year: '2025',
   },
   {

@@ -1,89 +1,98 @@
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import { Reveal, RevealLine } from '@/components/Motion';
 import { about } from '@/lib/data';
 
 export default function AboutPage() {
   return (
     <>
       <Nav />
-      <main className="min-h-screen bg-cream">
+      <main className="min-h-screen bg-ink">
         <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
-          <header className="mb-12">
-            <h1 className="font-display text-3xl font-bold text-stone-800 mb-3">
-              About
-            </h1>
-            <p className="font-body text-xl text-stone-600">
-              {about.intro}
-            </p>
-          </header>
 
-          <div className="space-y-12">
-            <section>
-              <p className="font-body text-stone-700 leading-relaxed whitespace-pre-line">
+          <Reveal>
+            <header className="mb-14">
+              <p className="label-amber mb-4">About</p>
+              <h1 className="font-display text-5xl font-bold text-bone mb-5 leading-tight">
+                {about.intro}
+              </h1>
+            </header>
+          </Reveal>
+
+          <Reveal delay={0.05}>
+            <section className="mb-14">
+              <p className="font-body text-[17px] text-ash leading-[1.8] whitespace-pre-line">
                 {about.story}
               </p>
             </section>
+          </Reveal>
 
-            <section>
-              <h2 className="font-display text-sm font-semibold text-stone-400 
-                uppercase tracking-wider mb-4">
-                Education
-              </h2>
-              <div>
-                <p className="font-body text-stone-800">
-                  {about.education.school}
-                </p>
-                <p className="font-body text-stone-600">
-                  {about.education.degree}
-                </p>
-                <p className="font-body text-sm text-stone-400 mt-1">
-                  Expected {about.education.graduation}
-                </p>
-              </div>
-            </section>
+          <div className="space-y-12">
 
-            <section>
-              <h2 className="font-display text-sm font-semibold text-stone-400 
-                uppercase tracking-wider mb-4">
-                Other things
-              </h2>
-              <ul className="space-y-2">
-                {about.interests.map((interest, index) => (
-                  <li key={index} className="font-body text-stone-600 flex gap-3">
-                    <span className="text-stone-300">—</span>
-                    {interest}
-                  </li>
-                ))}
-              </ul>
-            </section>
+            <RevealLine index={0}>
+              <section>
+                <p className="label-amber mb-5">Education</p>
+                <div className="border-l-2 border-amber/30 pl-5">
+                  <p className="font-display text-lg font-medium text-bone mb-1">
+                    {about.education.school}
+                  </p>
+                  <p className="font-body text-ash mb-2">
+                    {about.education.degree}
+                  </p>
+                  <p className="font-mono text-[10px] text-ash/50 uppercase tracking-[0.12em]">
+                    Expected {about.education.graduation}
+                  </p>
+                </div>
+              </section>
+            </RevealLine>
 
-            <section className="pt-8 border-t border-stone-200">
-              <h2 className="font-display text-sm font-semibold text-stone-400 
-                uppercase tracking-wider mb-4">
-                Get in touch
-              </h2>
-              <div className="space-y-2">
-                <p>
-                  <a 
-                    href="mailto:gyanb@berkeley.edu" 
-                    className="font-body text-stone-700 hover:text-terracotta transition-colors"
-                  >
-                    gyanb@berkeley.edu
-                  </a>
-                </p>
-                <p>
-                  <a 
-                    href="https://linkedin.com/in/gyanbhambhani" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-body text-stone-700 hover:text-terracotta transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </p>
-              </div>
-            </section>
+            <RevealLine index={1}>
+              <section>
+                <p className="label-amber mb-5">Other things</p>
+                <ul className="space-y-3">
+                  {about.interests.map((interest, i) => (
+                    <li
+                      key={i}
+                      className="font-body text-[16px] text-ash flex gap-4 leading-relaxed"
+                    >
+                      <span className="text-amber/40 shrink-0 mt-0.5">—</span>
+                      {interest}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </RevealLine>
+
+            <RevealLine index={2}>
+              <section className="pt-10 border-t border-edge">
+                <p className="label-amber mb-5">Get in touch</p>
+                <div className="space-y-3">
+                  <div>
+                    <a
+                      href="mailto:gyanb@berkeley.edu"
+                      className="font-mono text-[13px] text-ash hover:text-amber
+                        transition-colors"
+                    >
+                      gyanb@berkeley.edu
+                    </a>
+                  </div>
+                  <div>
+                    <a
+                      href="https://linkedin.com/in/gyanbhambhani"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-[13px] text-ash hover:text-amber
+                        transition-colors"
+                    >
+                      linkedin.com/in/gyanbhambhani
+                    </a>
+                  </div>
+                </div>
+              </section>
+            </RevealLine>
+
           </div>
+
         </div>
         <Footer />
       </main>
