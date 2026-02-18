@@ -3,51 +3,59 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-dark text-white;
+    @apply font-body;
+  }
+
+  ::selection {
+    background: rgba(180, 108, 92, 0.2);
   }
 }
 
 @layer components {
-  .container {
-    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  .link-hover {
+    @apply relative;
   }
 
-  .btn {
-    @apply inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  .link-hover::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-px bg-terracotta;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
   }
 
-  .btn-primary {
-    @apply bg-accent text-white hover:bg-accent/90;
+  .link-hover:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
-  .btn-secondary {
-    @apply bg-dark-gray text-white hover:bg-light-gray;
+  .card {
+    @apply bg-white border border-stone-200 rounded-lg p-6;
+    @apply transition-all duration-300;
   }
 
-  .section {
-    @apply py-20 md:py-32;
+  .card:hover {
+    @apply border-stone-300 shadow-sm;
   }
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-dark;
+  @apply bg-cream;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-dark-gray rounded-full;
+  @apply bg-stone-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-light-gray;
+  @apply bg-terracotta;
 }

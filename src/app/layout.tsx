@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Syne, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-syne",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
-const outfit = Outfit({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-source",
   display: "swap",
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  title: "Gyan Bhambhani | Building the future of intelligence",
-  description: "AI-Native Products · Real Estate Ops · Venture Capital",
+  title: "Gyan Bhambhani",
+  description: "I build things. Berkeley, AI, Venture.",
 };
 
 export default function RootLayout({
@@ -25,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="bg-dark text-white antialiased">
+    <html lang="en" className={`${syne.variable} ${sourceSerif.variable}`}>
+      <body className="bg-cream text-stone-800 antialiased selection:bg-terracotta/20">
         {children}
       </body>
     </html>
