@@ -32,7 +32,7 @@ body::after {
 }
 
 @layer components {
-  /* Animated underline for links */
+  /* Animated underline for inline links */
   .link-line {
     @apply relative;
     transition: color 0.2s ease;
@@ -51,13 +51,48 @@ body::after {
     transform-origin: left;
   }
 
-  /* Small uppercase monospace label */
+  /* Small ash uppercase mono label with square bullet */
   .label {
     @apply font-mono text-[10px] uppercase tracking-[0.2em] text-ash;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
+  .label::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background-color: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* Amber version */
   .label-amber {
     @apply font-mono text-[10px] uppercase tracking-[0.2em] text-amber;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .label-amber::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background-color: currentColor;
+    flex-shrink: 0;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
