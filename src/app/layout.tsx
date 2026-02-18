@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, Instrument_Serif, DM_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const syne = Syne({
@@ -37,10 +38,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${syne.variable} ${instrumentSerif.variable} ${dmMono.variable}`}
     >
+      <head>
+        {/* Anti-flash script: sets .dark class before hydration to prevent flicker */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{const t=localStorage.getItem('theme');if(t!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}`,
+          }}
+        />
+      </head>
       <body className="bg-ink text-bone antialiased">
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

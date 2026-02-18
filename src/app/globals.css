@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Theme tokens ─────────────────────────────────────────────────────────── */
+/* Tailwind CSS variable format: space-separated RGB channels (no rgb() wrapper) */
+
+:root {
+  /* Light mode — warm cream paper */
+  --color-bg:      245 240 232;   /* #F5F0E8 */
+  --color-fg:      28  25  22;    /* #1C1916 */
+  --color-accent:  196 129 59;    /* #C4813B amber — same in both */
+  --color-muted:   94  87  82;    /* #5E5752 */
+  --color-surface: 237 231 220;   /* #EDE7DC */
+  --color-border:  216 208 197;   /* #D8D0C5 */
+}
+
+.dark {
+  /* Dark mode — deep warm black */
+  --color-bg:      15  14  12;    /* #0F0E0C */
+  --color-fg:      234 228 217;   /* #EAE4D9 */
+  --color-accent:  196 129 59;    /* #C4813B amber */
+  --color-muted:   107 100 96;    /* #6B6460 */
+  --color-surface: 25  23  20;    /* #191714 */
+  --color-border:  45  41  35;    /* #2D2923 */
+}
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -9,14 +33,15 @@
 
   body {
     @apply font-body bg-ink text-bone antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   ::selection {
-    background: rgba(196, 129, 59, 0.3);
+    background: rgb(196 129 59 / 0.28);
   }
 }
 
-/* Subtle film grain overlay */
+/* ─── Grain overlay (works in both themes) ────────────────────────────────── */
 body::after {
   content: '';
   position: fixed;
@@ -31,13 +56,12 @@ body::after {
   background-size: 300px 300px;
 }
 
+/* ─── Components ───────────────────────────────────────────────────────────── */
 @layer components {
-  /* Animated underline for inline links */
   .link-line {
     @apply relative;
     transition: color 0.2s ease;
   }
-
   .link-line::after {
     content: '';
     @apply absolute -bottom-px left-0 w-full h-px bg-amber;
@@ -45,20 +69,18 @@ body::after {
     transform-origin: right;
     transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
   }
-
   .link-line:hover::after {
     transform: scaleX(1);
     transform-origin: left;
   }
 
-  /* Small ash uppercase mono label with square bullet */
+  /* Mono label with small square bullet */
   .label {
     @apply font-mono text-[10px] uppercase tracking-[0.2em] text-ash;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-
   .label::before {
     content: '';
     display: inline-block;
@@ -68,14 +90,12 @@ body::after {
     flex-shrink: 0;
   }
 
-  /* Amber version */
   .label-amber {
     @apply font-mono text-[10px] uppercase tracking-[0.2em] text-amber;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-
   .label-amber::before {
     content: '';
     display: inline-block;
@@ -86,7 +106,7 @@ body::after {
   }
 }
 
-/* Respect user's motion preferences */
+/* ─── Reduced motion ───────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -96,20 +116,8 @@ body::after {
   }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 3px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0F0E0C;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2D2923;
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #C4813B;
-}
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track  { background: rgb(var(--color-bg)); }
+::-webkit-scrollbar-thumb  { background: rgb(var(--color-border)); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--color-accent)); }

@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { projects } from '@/lib/data';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const NAV_ITEMS = ['Projects', 'Work', 'Research', 'About', 'Writing'];
 
@@ -59,20 +60,22 @@ export default function Home() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="flex justify-between items-center mb-24"
         >
-          <span className="font-mono text-[10px] text-ash/60 uppercase tracking-[0.22em]">
+          <span className="font-mono text-[15px] text-ash/60 uppercase tracking-[0.22em]">
             Berkeley · 2027
           </span>
-          <nav className="flex gap-7">
+          <nav className="flex items-center gap-7">
             {NAV_ITEMS.map((label) => (
               <Link
                 key={label}
                 href={`/${label.toLowerCase()}`}
-                className="font-mono text-[10px] text-ash hover:text-bone uppercase
+                className="font-mono text-[15px] text-ash hover:text-bone uppercase
                   tracking-[0.15em] transition-colors duration-200"
               >
                 {label}
               </Link>
             ))}
+            <span className="text-edge/60 select-none font-mono text-[10px]">|</span>
+            <ThemeToggle />
           </nav>
         </motion.div>
 

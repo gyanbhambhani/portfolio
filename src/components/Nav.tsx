@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ThemeToggle } from './ThemeToggle';
 
 const navLinks = [
   { href: '/projects', label: 'Projects' },
@@ -34,16 +35,16 @@ export default function Nav() {
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="max-w-4xl mx-auto px-6 py-5 flex justify-between items-center">
         <Link
           href="/"
-          className="font-mono text-xs text-ash/70 hover:text-bone transition-colors
+          className="font-mono text-base text-ash/70 hover:text-bone transition-colors
             uppercase tracking-[0.2em]"
         >
           GB
         </Link>
 
-        <div className="flex gap-7">
+        <div className="flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href || pathname?.startsWith(link.href + '/');
@@ -51,7 +52,8 @@ export default function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-mono text-[11px] uppercase tracking-[0.15em] transition-colors ${
+                className={`font-mono text-[15px] uppercase tracking-[0.15em]
+                  transition-colors duration-200 ${
                   isActive ? 'text-amber' : 'text-ash hover:text-bone'
                 }`}
               >
@@ -59,6 +61,11 @@ export default function Nav() {
               </Link>
             );
           })}
+
+          {/* Divider */}
+          <span className="text-edge select-none">|</span>
+
+          <ThemeToggle />
         </div>
       </div>
     </motion.nav>
