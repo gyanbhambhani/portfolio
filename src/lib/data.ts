@@ -44,7 +44,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'rltr',
-    title: 'RLTR',
+    title: 'Mano',
     tagline: 'AI for real estate agents',
     description: 'AI-native transaction platform that automates property search, paperwork, and compliance.',
     why: `I got my real estate license and saw how much time agents waste on paperwork and 
@@ -95,19 +95,6 @@ export const projects: Project[] = [
     year: '2024',
   },
   {
-    slug: 'mano',
-    title: 'Mano',
-    tagline: 'VC intelligence browser',
-    description: 'AI-powered Chrome extension for smarter investment decisions.',
-    why: `VCs spend too much time on manual research. Built a 24/7 AI chief of staff 
-      for capital deployment.`,
-    learned: `Browser extensions have weird constraints. Also learned about building 
-      for power users who have very specific workflows.`,
-    tech: ['Chrome Extension', 'AI', 'TypeScript'],
-    url: 'https://mano.network',
-    year: '2025',
-  },
-  {
     slug: 'fundless',
     title: 'Fundless',
     tagline: 'VC without capital',
@@ -117,7 +104,6 @@ export const projects: Project[] = [
     learned: `Still building. Learning about reputation systems and how to 
       create value without capital.`,
     tech: ['Next.js', 'Vercel'],
-    url: 'https://fundless.vercel.app',
     year: '2025',
   },
   {

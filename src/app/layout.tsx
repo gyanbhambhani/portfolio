@@ -45,7 +45,7 @@ export default function RootLayout({
         {/* Anti-flash script: sets .dark class before hydration to prevent flicker */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{const t=localStorage.getItem('theme');if(t!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}`,
+            __html: `try{const t=localStorage.getItem('theme');const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(t===null&&prefersDark))document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}`,
           }}
         />
       </head>

@@ -15,12 +15,16 @@ const ThemeContext = createContext<ThemeContextValue>({
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // Default to dark — synced from localStorage in useEffect
+  // Initial state synced from localStorage + system preference in useEffect
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
     const saved = localStorage.getItem('theme');
-    const initial: Theme = saved === 'light' ? 'light' : 'dark';
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initial: Theme =
+      saved === 'light' ? 'light'
+      : saved === 'dark' ? 'dark'
+      : systemDark ? 'dark' : 'light';
     setTheme(initial);
     // Class already applied by the anti-flash script in layout.tsx
   }, []);
