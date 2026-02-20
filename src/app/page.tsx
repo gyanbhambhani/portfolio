@@ -4,9 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { projects } from '@/lib/data';
-import { ThemeToggle } from '@/components/ThemeToggle';
-
-const NAV_ITEMS = ['Projects', 'Work', 'Research', 'About', 'Writing'];
+import Nav from '@/components/Nav';
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -23,6 +21,7 @@ export default function Home() {
 
   return (
     <main ref={mainRef} className="min-h-screen bg-ink relative overflow-hidden">
+      <Nav />
 
       {/* Mouse-following ambient glow */}
       <div
@@ -51,33 +50,7 @@ export default function Home() {
         }}
       />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 pt-28 pb-24">
-
-        {/* Top bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="flex justify-between items-center mb-24"
-        >
-          <span className="font-mono text-[15px] text-ash/60 uppercase tracking-[0.22em]">
-            Berkeley · 2027
-          </span>
-          <nav className="flex items-center gap-7">
-            {NAV_ITEMS.map((label) => (
-              <Link
-                key={label}
-                href={`/${label.toLowerCase()}`}
-                className="font-mono text-[15px] text-ash hover:text-bone uppercase
-                  tracking-[0.15em] transition-colors duration-200"
-              >
-                {label}
-              </Link>
-            ))}
-            <span className="text-edge/60 select-none font-mono text-[10px]">|</span>
-            <ThemeToggle />
-          </nav>
-        </motion.div>
+      <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-24">
 
         {/* Hero */}
         <div className="mb-16">
@@ -148,7 +121,7 @@ export default function Home() {
                       transition-transform duration-200 ease-out"
                   />
 
-                  <span className="font-mono text-[10px] text-ash/30 shrink-0 w-5 pl-0
+                  <span className="font-mono text-[10px] text-ash/30 shrink-0 w-5
                     group-hover:text-amber/60 transition-colors duration-200">
                     {String(i + 1).padStart(2, '0')}
                   </span>
