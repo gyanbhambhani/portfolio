@@ -1,15 +1,12 @@
 import Link from 'next/link';
-import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import { Reveal, RevealLine } from '@/components/Motion';
 import { projects } from '@/lib/data';
 
 export default function ProjectsPage() {
   return (
-    <>
-      <Nav />
-      <main className="min-h-screen bg-ink">
-        <div className="max-w-4xl mx-auto px-6 pt-32 pb-24">
+    <main className="min-h-screen bg-ink">
+      <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
 
           <Reveal>
             <header className="mb-16">
@@ -30,19 +27,19 @@ export default function ProjectsPage() {
                 <Link
                   href={`/projects/${project.slug}`}
                   className="group relative block bg-ink hover:bg-rail
-                    transition-colors duration-200 cursor-pointer p-8 h-full
+                    transition-colors duration-150 cursor-pointer p-8 h-full
                     overflow-hidden"
                 >
                   {/* Top amber line that draws in from left on hover */}
                   <span
                     className="absolute top-0 left-0 right-0 h-[2px] bg-amber
                       origin-left scale-x-0 group-hover:scale-x-100
-                      transition-transform duration-300 ease-out"
+                      transition-transform duration-150 ease-out"
                   />
 
                   <div className="flex justify-between items-start mb-8">
                     <span className="font-mono text-[10px] text-ash/30
-                      group-hover:text-amber/50 transition-colors duration-200">
+                      group-hover:text-amber/50 transition-colors duration-150">
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <span className="font-mono text-[10px] text-ash/30">
@@ -51,7 +48,7 @@ export default function ProjectsPage() {
                   </div>
 
                   <h2 className="font-display text-2xl font-semibold text-bone
-                    group-hover:text-amber transition-colors duration-200
+                    group-hover:text-amber transition-colors duration-150
                     mb-3 leading-tight">
                     {project.title}
                   </h2>
@@ -69,7 +66,7 @@ export default function ProjectsPage() {
 
                     <span
                       className="font-mono text-[15px] text-ash/20
-                        group-hover:text-amber transition-colors duration-200
+                        group-hover:text-amber transition-colors duration-150
                         group-hover:translate-x-0.5 group-hover:-translate-y-0.5
                         transition-transform shrink-0"
                     >
@@ -82,8 +79,7 @@ export default function ProjectsPage() {
           </div>
 
         </div>
-        <Footer />
-      </main>
-    </>
+      <Footer />
+    </main>
   );
 }

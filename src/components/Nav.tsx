@@ -47,7 +47,7 @@ export default function Nav() {
       <motion.nav
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled && !menuOpen
             ? 'bg-ink/90 backdrop-blur-md border-b border-edge'
@@ -142,7 +142,7 @@ export default function Nav() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3, delay: i * 0.06, ease: 'easeOut' }}
+                    transition={{ duration: 0.22, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <Link
                       href={link.href}

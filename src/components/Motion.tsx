@@ -19,9 +19,9 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{
-        duration: 0.55,
+        duration: 0.26,
         delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: [0.22, 1, 0.36, 1],
       }}
       className={className}
     >
@@ -46,9 +46,9 @@ export function RevealLine({ children, index = 0, className }: RevealLineProps) 
       initial={{ opacity: 0, x: -12 }}
       animate={isInView ? { opacity: 1, x: 0 } : {}}
       transition={{
-        duration: 0.45,
-        delay: index * 0.07,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        duration: 0.22,
+        delay: index * 0.04,
+        ease: [0.22, 1, 0.36, 1],
       }}
       className={className}
     >

@@ -1,14 +1,11 @@
-import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import { Reveal, RevealLine } from '@/components/Motion';
 import { workExperiences } from '@/lib/data';
 
 export default function WorkPage() {
   return (
-    <>
-      <Nav />
-      <main className="min-h-screen bg-ink">
-        <div className="max-w-4xl mx-auto px-6 pt-32 pb-24">
+    <main className="min-h-screen bg-ink">
+      <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
 
           <Reveal>
             <header className="mb-16">
@@ -79,8 +76,7 @@ export default function WorkPage() {
           </div>
 
         </div>
-        <Footer />
-      </main>
-    </>
+      <Footer />
+    </main>
   );
 }

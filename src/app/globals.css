@@ -34,6 +34,20 @@
   body {
     @apply font-body bg-ink text-bone antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
+    /* type-opentype-contextual-alternates: keep calt on for contextual glyph adjustment */
+    font-feature-settings: 'calt' 1, 'liga' 1;
+    /* type-optical-sizing-auto: size-adaptive glyph rendering */
+    font-optical-sizing: auto;
+  }
+
+  /* type-text-wrap-balance-headings: even line breaks on all headings */
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  /* type-text-wrap-pretty: reduce orphans in body paragraphs */
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
@@ -58,20 +72,31 @@ body::after {
 
 /* ─── Components ───────────────────────────────────────────────────────────── */
 @layer components {
+  /* link-line: animated underline on hover
+     easing-entrance-ease-out + easing-exit-ease-in applied via transform-origin swap */
   .link-line {
     @apply relative;
-    transition: color 0.2s ease;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
   }
   .link-line::after {
     content: '';
     @apply absolute -bottom-px left-0 w-full h-px bg-amber;
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+    /* easing-exit-ease-in for the exit direction */
+    transition: transform 0.18s cubic-bezier(0.6, 0, 1, 1);
   }
   .link-line:hover::after {
     transform: scaleX(1);
     transform-origin: left;
+    /* easing-entrance-ease-out for the entrance direction */
+    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* physics-active-state: scale down on press */
+  .link-line:active {
+    opacity: 0.7;
   }
 
   /* Mono label with small square bullet */
@@ -104,9 +129,16 @@ body::after {
     background-color: currentColor;
     flex-shrink: 0;
   }
+
+  /* page-root: stacking context for content above grain */
+  .page-root {
+    position: relative;
+    z-index: 10;
+  }
 }
 
 /* ─── Reduced motion ───────────────────────────────────────────────────────── */
+/* a11y-reduced-motion-check: collapse all animations for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

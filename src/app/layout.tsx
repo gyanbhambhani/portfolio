@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Syne, Instrument_Serif, DM_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import Nav from "@/components/Nav";
 import "./globals.css";
 
 const syne = Syne({
@@ -51,6 +52,7 @@ export default function RootLayout({
       </head>
       <body className="bg-ink text-bone antialiased">
         <ThemeProvider>
+          <Nav />
           {children}
         </ThemeProvider>
       </body>

@@ -1,4 +1,3 @@
-import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import { Reveal, RevealLine } from '@/components/Motion';
 import { research } from '@/lib/data';
@@ -11,9 +10,7 @@ const sections = [
 
 export default function ResearchPage() {
   return (
-    <>
-      <Nav />
-      <main className="min-h-screen bg-ink">
+    <main className="min-h-screen bg-ink">
         <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
 
           <Reveal>
@@ -50,6 +47,5 @@ export default function ResearchPage() {
         </div>
         <Footer />
       </main>
-    </>
   );
 }

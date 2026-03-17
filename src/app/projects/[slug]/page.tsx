@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import { Reveal, RevealLine } from '@/components/Motion';
 import { projects } from '@/lib/data';
@@ -29,9 +28,7 @@ export default async function ProjectPage({ params }: Props) {
   ];
 
   return (
-    <>
-      <Nav />
-      <main className="min-h-screen bg-ink">
+    <main className="min-h-screen bg-ink">
         <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
 
           <Reveal>
@@ -130,6 +127,5 @@ export default async function ProjectPage({ params }: Props) {
         </div>
         <Footer />
       </main>
-    </>
   );
 }

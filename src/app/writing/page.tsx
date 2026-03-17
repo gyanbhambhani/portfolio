@@ -1,12 +1,9 @@
-import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import { Reveal } from '@/components/Motion';
 
 export default function WritingPage() {
   return (
-    <>
-      <Nav />
-      <main className="min-h-screen bg-ink">
+    <main className="min-h-screen bg-ink">
         <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
 
           <Reveal>
@@ -31,7 +28,6 @@ export default function WritingPage() {
 
         </div>
         <Footer />
-      </main>
-    </>
+    </main>
   );
 }

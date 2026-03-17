@@ -1,13 +1,10 @@
-import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import { Reveal, RevealLine } from '@/components/Motion';
 import { about } from '@/lib/data';
 
 export default function AboutPage() {
   return (
-    <>
-      <Nav />
-      <main className="min-h-screen bg-ink">
+    <main className="min-h-screen bg-ink">
         <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
 
           <Reveal>
@@ -83,7 +80,7 @@ export default function AboutPage() {
                     <a
                       href="mailto:gyanb@berkeley.edu"
                       className="font-mono text-[13px] text-ash/60 hover:text-amber
-                        transition-colors duration-200"
+                        transition-colors duration-150"
                     >
                       gyanb@berkeley.edu
                     </a>
@@ -94,7 +91,7 @@ export default function AboutPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-mono text-[13px] text-ash/60 hover:text-amber
-                        transition-colors duration-200"
+                        transition-colors duration-150"
                     >
                       linkedin.com/in/gyanbhambhani
                     </a>
@@ -107,7 +104,6 @@ export default function AboutPage() {
 
         </div>
         <Footer />
-      </main>
-    </>
+    </main>
   );
 }
