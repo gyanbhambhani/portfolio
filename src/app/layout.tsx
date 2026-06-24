@@ -28,7 +28,7 @@ const dmMono = DM_Mono({
 
 export const metadata: Metadata = {
   title: "Gyan Bhambhani",
-  description: "I build products. Berkeley, AI, Venture.",
+  description: "I build the future. Berkeley, AI, Venture.",
 };
 
 export default function RootLayout({
