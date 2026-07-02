@@ -1,33 +1,34 @@
 import Footer from '@/components/Footer';
+import GlowCard from '@/components/GlowCard';
 import { Reveal } from '@/components/Motion';
 
 export default function WritingPage() {
   return (
-    <main className="min-h-screen bg-ink">
-        <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+    <main className="min-h-screen bg-black">
+      <div className="max-w-4xl mx-auto px-6 pt-40 pb-24">
 
-          <Reveal>
-            <header className="mb-16">
-              <p className="label-amber mb-4">Writing</p>
-              <h1 className="font-display text-5xl font-bold text-bone mb-4 leading-tight">
-                Writing
-              </h1>
-              <p className="font-body italic text-lg text-ash">
-                Thoughts, ideas, and things I&apos;m figuring out.
-              </p>
-            </header>
-          </Reveal>
+        <Reveal>
+          <header className="mb-16">
+            <p className="text-white/40 text-sm tracking-widest uppercase mb-6">Writing</p>
+            <h1 className="font-serif-display text-5xl md:text-7xl text-white tracking-tight mb-5">
+              Writing
+            </h1>
+            <p className="font-serif-display italic text-xl md:text-2xl text-white/60">
+              Thoughts, ideas, and things I&apos;m figuring out.
+            </p>
+          </header>
+        </Reveal>
 
-          <Reveal delay={0.1}>
-            <div className="py-20 border-t border-edge">
-              <p className="font-mono text-[11px] text-ash/40 uppercase tracking-[0.2em]">
-                Coming soon
-              </p>
+        <Reveal delay={0.1}>
+          <GlowCard borderRadius={24}>
+            <div className="p-12 md:p-16 flex items-center justify-center">
+              <p className="text-white/40 text-xs uppercase tracking-[0.2em]">Coming soon</p>
             </div>
-          </Reveal>
+          </GlowCard>
+        </Reveal>
 
-        </div>
-        <Footer />
+      </div>
+      <Footer />
     </main>
   );
 }

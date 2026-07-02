@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Syne, Instrument_Serif, DM_Mono } from "next/font/google";
+import { Syne, EB_Garamond, DM_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Nav from "@/components/Nav";
 import "./globals.css";
@@ -11,11 +11,11 @@ const syne = Syne({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const instrumentSerif = Instrument_Serif({
+const garamond = EB_Garamond({
   subsets: ["latin"],
   variable: "--font-instrument",
   display: "swap",
-  weight: ["400"],
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
 });
 
@@ -40,7 +40,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${syne.variable} ${instrumentSerif.variable} ${dmMono.variable}`}
+      className={`${syne.variable} ${garamond.variable} ${dmMono.variable}`}
     >
       <head>
         {/* Anti-flash script: sets .dark class before hydration to prevent flicker */}
@@ -50,7 +50,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-ink text-bone antialiased">
+      <body className="bg-black text-white antialiased">
         <ThemeProvider>
           <Nav />
           {children}
