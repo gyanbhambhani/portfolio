@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ThemeToggle } from './ThemeToggle';
+import { Globe, Menu, X } from 'lucide-react';
+import BorderGlow from './BorderGlow';
 
 const navLinks = [
   { href: '/projects', label: 'Projects' },
@@ -16,26 +17,15 @@ const navLinks = [
 
 export default function Nav() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Close menu on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
-  // Scroll listener
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Lock body scroll when menu open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  // Close on Escape
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenuOpen(false); };
     window.addEventListener('keydown', onKey);
@@ -44,95 +34,94 @@ export default function Nav() {
 
   return (
     <>
-      <motion.nav
+      <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled && !menuOpen
-            ? 'bg-ink/90 backdrop-blur-md border-b border-edge'
-            : 'bg-transparent'
-        }`}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed top-0 left-0 right-0 z-50 px-6 py-6"
       >
-        <div className="max-w-4xl mx-auto px-6 py-5 flex justify-between items-center">
-          <Link
-            href="/"
-            className="font-mono text-base text-ash/70 hover:text-bone transition-colors
-              uppercase tracking-[0.2em]"
-          >
-            GB
-          </Link>
+        <BorderGlow
+          className="max-w-5xl mx-auto"
+          borderRadius={40}
+          glowColor="0 0 100"
+          backgroundColor="#0a0a0c"
+          colors={['#ffffff', '#d4d4d8', '#a1a1aa']}
+          glowRadius={26}
+          glowIntensity={0.9}
+          coneSpread={25}
+          edgeSensitivity={30}
+          fillOpacity={0.4}
+        >
+          <div className="px-6 py-3 flex items-center justify-between w-full">
+          {/* Left: brand + desktop links */}
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center gap-2">
+              <Globe size={22} className="text-white" strokeWidth={1.5} />
+              <span className="text-white font-semibold text-lg tracking-tight">Gyan</span>
+            </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => {
-              const isActive =
-                pathname === link.href || pathname?.startsWith(link.href + '/');
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`font-mono text-[15px] uppercase tracking-[0.15em]
-                    transition-colors duration-200 ${
-                    isActive ? 'text-amber' : 'text-ash hover:text-bone'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-            <span className="text-edge select-none">|</span>
-            <ThemeToggle />
+            <div className="hidden md:flex items-center gap-8 ml-8">
+              {navLinks.map((link) => {
+                const isActive =
+                  pathname === link.href || pathname?.startsWith(link.href + '/');
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`text-sm font-medium transition-colors duration-150 ${
+                      isActive ? 'text-white' : 'text-white/80 hover:text-white'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Mobile right side: theme toggle + hamburger */}
-          <div className="flex items-center gap-5 md:hidden">
-            <ThemeToggle />
+          {/* Right: contact actions + mobile toggle */}
+          <div className="flex items-center gap-2">
+            <a
+              href="mailto:gyanb@berkeley.edu"
+              className="hidden sm:inline-block text-white text-sm font-medium
+                px-3 hover:text-white/80 transition-colors duration-150"
+            >
+              Email
+            </a>
+            <a
+              href="https://linkedin.com/in/gyanbhambhani"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-block liquid-glass rounded-full px-6 py-2
+                text-white text-sm font-medium hover:bg-white/5 transition-colors duration-150"
+            >
+              Connect
+            </a>
+
             <button
               onClick={() => setMenuOpen((o) => !o)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="flex flex-col justify-center items-center w-6 h-6 gap-[5px]
-                cursor-pointer"
+              className="md:hidden liquid-glass rounded-full p-2.5 text-white
+                active:scale-95 transition-transform duration-150"
             >
-              <motion.span
-                animate={menuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.25, ease: 'easeInOut' }}
-                className="block w-5 h-px bg-bone origin-center"
-              />
-              <motion.span
-                animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-                transition={{ duration: 0.15 }}
-                className="block w-5 h-px bg-bone origin-center"
-              />
-              <motion.span
-                animate={menuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.25, ease: 'easeInOut' }}
-                className="block w-5 h-px bg-bone origin-center"
-              />
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
-        </div>
-      </motion.nav>
+          </div>
+        </BorderGlow>
+      </motion.div>
 
-      {/* Mobile fullscreen menu overlay */}
+      {/* Mobile fullscreen menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-ink flex flex-col justify-center px-8 md:hidden"
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 bg-black flex flex-col justify-center px-8 md:hidden"
           >
-            {/* Grain overlay consistency */}
-            <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")`,
-                backgroundSize: '300px 300px',
-              }}
-            />
-
-            <nav className="relative space-y-1">
+            <nav className="space-y-1">
               {navLinks.map((link, i) => {
                 const isActive =
                   pathname === link.href || pathname?.startsWith(link.href + '/');
@@ -142,15 +131,15 @@ export default function Nav() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.22, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.22, delay: i * 0.03, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <Link
                       href={link.href}
-                      className={`block font-display font-bold py-3 transition-colors
-                        duration-200 border-b border-edge/50 ${
-                        isActive ? 'text-amber' : 'text-bone/80 hover:text-amber'
+                      className={`font-serif-display block py-3 border-b border-white/10
+                        transition-colors duration-150 ${
+                        isActive ? 'text-white' : 'text-white/60 hover:text-white'
                       }`}
-                      style={{ fontSize: 'clamp(2rem, 8vw, 3rem)' }}
+                      style={{ fontSize: 'clamp(2.2rem, 9vw, 3.2rem)' }}
                     >
                       {link.label}
                     </Link>
@@ -158,6 +147,23 @@ export default function Nav() {
                 );
               })}
             </nav>
+
+            <div className="mt-10 flex gap-4">
+              <a
+                href="mailto:gyanb@berkeley.edu"
+                className="liquid-glass rounded-full px-6 py-3 text-white text-sm font-medium"
+              >
+                Email
+              </a>
+              <a
+                href="https://linkedin.com/in/gyanbhambhani"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="liquid-glass rounded-full px-6 py-3 text-white text-sm font-medium"
+              >
+                Connect
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
