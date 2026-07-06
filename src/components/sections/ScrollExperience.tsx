@@ -38,6 +38,14 @@ export default function ScrollExperience() {
     const bitmaps: ImageBitmap[] = [];
     const cleanups: Array<() => void> = [];
 
+    // Mobile browsers (esp. iOS Safari) can't reliably scrub a paused video
+    // by seeking, and frame extraction via createImageBitmap frequently times
+    // out. On those devices we simply autoplay the video on a loop so the
+    // background is always visible.
+    const isMobile =
+      window.matchMedia('(max-width: 767px)').matches ||
+      window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
     // ===================== SCROLL VIDEO =====================
     const canvas = videoCanvasRef.current;
     const videoEl = videoElRef.current;
@@ -168,32 +176,63 @@ export default function ScrollExperience() {
       }
     };
 
-    if (videoEl) {
-      const onSeeked = () => {
-        videoSeeking = false;
-      };
-      const onStalled = () => {
-        videoSeeking = false;
-      };
-      const onLoadedData = () => {
-        videoEl.currentTime = 0;
-      };
-      videoEl.addEventListener('seeked', onSeeked);
-      videoEl.addEventListener('stalled', onStalled);
-      videoEl.addEventListener('loadeddata', onLoadedData);
-      cleanups.push(() => {
-        videoEl.removeEventListener('seeked', onSeeked);
-        videoEl.removeEventListener('stalled', onStalled);
-        videoEl.removeEventListener('loadeddata', onLoadedData);
-      });
-    }
+    if (isMobile && videoEl) {
+      // Autoplay looping background — reliable on touch devices.
+      videoEl.loop = true;
+      videoEl.autoplay = true;
+      videoEl.style.display = 'block';
+      if (canvas) canvas.style.visibility = 'hidden';
 
-    if (canvas) canvas.style.visibility = 'hidden';
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    cleanups.push(() => window.removeEventListener('resize', resizeCanvas));
-    rafIds.push(requestAnimationFrame(videoTick));
-    void extractFrames();
+      const tryPlay = () => {
+        videoEl.play().catch(() => {
+          /* autoplay may be blocked until first gesture */
+        });
+      };
+      videoEl.addEventListener('loadeddata', tryPlay);
+      tryPlay();
+
+      // Fallback: kick off playback on the first user interaction.
+      const onFirstInteraction = () => {
+        tryPlay();
+        window.removeEventListener('touchstart', onFirstInteraction);
+        window.removeEventListener('scroll', onFirstInteraction);
+      };
+      window.addEventListener('touchstart', onFirstInteraction, { passive: true });
+      window.addEventListener('scroll', onFirstInteraction, { passive: true });
+
+      cleanups.push(() => {
+        videoEl.removeEventListener('loadeddata', tryPlay);
+        window.removeEventListener('touchstart', onFirstInteraction);
+        window.removeEventListener('scroll', onFirstInteraction);
+      });
+    } else {
+      if (videoEl) {
+        const onSeeked = () => {
+          videoSeeking = false;
+        };
+        const onStalled = () => {
+          videoSeeking = false;
+        };
+        const onLoadedData = () => {
+          videoEl.currentTime = 0;
+        };
+        videoEl.addEventListener('seeked', onSeeked);
+        videoEl.addEventListener('stalled', onStalled);
+        videoEl.addEventListener('loadeddata', onLoadedData);
+        cleanups.push(() => {
+          videoEl.removeEventListener('seeked', onSeeked);
+          videoEl.removeEventListener('stalled', onStalled);
+          videoEl.removeEventListener('loadeddata', onLoadedData);
+        });
+      }
+
+      if (canvas) canvas.style.visibility = 'hidden';
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      cleanups.push(() => window.removeEventListener('resize', resizeCanvas));
+      rafIds.push(requestAnimationFrame(videoTick));
+      void extractFrames();
+    }
 
     // ===================== PARTICLES =====================
     const pCanvas = particlesCanvasRef.current;
