@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Sans, Jim_Nightshade } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Nav from "@/components/Nav";
 import "./globals.css";
@@ -12,12 +12,11 @@ const plexSans = IBM_Plex_Sans({
   style: ["normal", "italic"],
 });
 
-const plexMono = IBM_Plex_Mono({
+const jimNightshade = Jim_Nightshade({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-display",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -34,7 +33,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${plexSans.variable} ${plexMono.variable}`}
+      className={`${plexSans.variable} ${jimNightshade.variable}`}
     >
       <head>
         {/* Anti-flash script: sets .dark class before hydration to prevent flicker */}

@@ -52,12 +52,12 @@
 
 /* ─── Components ───────────────────────────────────────────────────────────── */
 @layer components {
-  /* Technical display — IBM Plex Mono, kept class name for existing markup */
+  /* Display — Jim Nightshade; class name kept for existing markup */
   .font-serif-display {
-    font-family: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
-    font-optical-sizing: auto;
-    font-variant-numeric: slashed-zero tabular-nums;
-    letter-spacing: -0.03em;
+    font-family: var(--font-display), "Jim Nightshade", cursive;
+    font-weight: 400;
+    font-synthesis: none;
+    letter-spacing: 0.02em;
   }
 
   /* Liquid glass surface — used on every glass element across the site */

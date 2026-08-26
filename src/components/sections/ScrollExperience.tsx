@@ -389,11 +389,10 @@ export default function ScrollExperience() {
         >
           {cards.map((card) => (
             <div key={card.title}>
-              <h3 className="font-serif-display text-xl md:text-2xl font-semibold
-                text-white mb-3 tracking-tight">
+              <h3 className="font-serif-display text-3xl md:text-4xl text-white mb-3">
                 {card.title}
               </h3>
-              <p className="font-mono text-white/70 text-sm leading-relaxed">
+              <p className="font-serif-display text-white/70 text-xl leading-snug">
                 {card.body}
               </p>
             </div>
