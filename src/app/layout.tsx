@@ -1,29 +1,23 @@
 import type { Metadata } from "next";
-import { Syne, EB_Garamond, DM_Mono } from "next/font/google";
+import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Nav from "@/components/Nav";
 import "./globals.css";
 
-const syne = Syne({
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-sans",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const garamond = EB_Garamond({
-  subsets: ["latin"],
-  variable: "--font-instrument",
-  display: "swap",
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 
-const dmMono = DM_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-dm-mono",
+  variable: "--font-mono",
   display: "swap",
-  weight: ["300", "400", "500"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -40,7 +34,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${syne.variable} ${garamond.variable} ${dmMono.variable}`}
+      className={`${plexSans.variable} ${plexMono.variable}`}
     >
       <head>
         {/* Anti-flash script: sets .dark class before hydration to prevent flicker */}

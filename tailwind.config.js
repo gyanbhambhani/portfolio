@@ -7,9 +7,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['var(--font-syne)', 'system-ui', 'sans-serif'],
-        body: ['var(--font-instrument)', 'Georgia', 'serif'],
-        mono: ['var(--font-dm-mono)', 'Courier New', 'monospace'],
+        display: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+        body: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
       colors: {
         // CSS variable-based colors — switch automatically with .dark class
