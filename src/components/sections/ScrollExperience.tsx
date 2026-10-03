@@ -49,10 +49,13 @@ export default function ScrollExperience() {
     // ===================== SCROLL VIDEO =====================
     const canvas = videoCanvasRef.current;
     const videoEl = videoElRef.current;
-    const ctx = canvas?.getContext('2d') ?? null;
+    const ctx = canvas?.getContext('2d', { alpha: false, desynchronized: true }) ?? null;
     let framesReady = false;
+    let plannedFrameCount = 180;
     let lastFrameIndex = -1;
     let videoSeeking = false;
+    let pendingSeekTarget = -1;
+    let paintScheduled = false;
 
     const resizeCanvas = () => {
       if (!canvas) return;
@@ -89,28 +92,53 @@ export default function ScrollExperience() {
       ctx.drawImage(frame, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     };
 
-    const videoTick = () => {
+    const paintVideo = () => {
       if (!alive) return;
       const progress = getProgress();
-      if (framesReady && bitmaps.length > 0) {
-        const idx = Math.round(progress * (bitmaps.length - 1));
-        if (idx !== lastFrameIndex) {
-          lastFrameIndex = idx;
-          if (bitmaps[idx]) drawFrame(bitmaps[idx]);
-        }
-      } else if (
-        videoEl &&
-        videoEl.duration &&
-        isFinite(videoEl.duration) &&
-        videoEl.readyState >= 1
-      ) {
-        const target = progress * videoEl.duration;
-        if (!videoSeeking && Math.abs(videoEl.currentTime - target) > 0.001) {
-          videoSeeking = true;
-          videoEl.currentTime = target;
+      if (bitmaps.length > 0) {
+        const span = Math.max(1, (framesReady ? bitmaps.length : plannedFrameCount) - 1);
+        const idx = Math.round(progress * span);
+        const frame = bitmaps[idx];
+        if (frame) {
+          if (idx !== lastFrameIndex) {
+            lastFrameIndex = idx;
+            drawFrame(frame);
+          }
+          if (canvas) canvas.style.visibility = 'visible';
+          if (videoEl) videoEl.style.display = 'none';
+          return;
         }
       }
-      rafIds.push(requestAnimationFrame(videoTick));
+      if (!framesReady && videoEl && videoEl.style.display === 'none') {
+        videoEl.style.display = 'block';
+        if (canvas) canvas.style.visibility = 'hidden';
+      }
+      if (
+        !videoEl ||
+        !videoEl.duration ||
+        !isFinite(videoEl.duration) ||
+        videoEl.readyState < 1 ||
+        videoSeeking
+      ) {
+        return;
+      }
+      const target = progress * videoEl.duration;
+      // One seek per scroll position. Repeating a finished seek hitches scroll.
+      if (Math.abs(target - pendingSeekTarget) < 1 / 24) return;
+      pendingSeekTarget = target;
+      videoSeeking = true;
+      videoEl.currentTime = target;
+    };
+
+    const schedulePaint = () => {
+      if (paintScheduled) return;
+      paintScheduled = true;
+      rafIds.push(
+        requestAnimationFrame(() => {
+          paintScheduled = false;
+          paintVideo();
+        }),
+      );
     };
 
     const extractFrames = async () => {
@@ -138,10 +166,13 @@ export default function ScrollExperience() {
           return;
         }
 
-        const scale = Math.min(1, 1280 / video.videoWidth);
+        const scale = Math.min(1, 1024 / video.videoWidth);
         const scaledWidth = Math.round(video.videoWidth * scale);
         const scaledHeight = Math.round(video.videoHeight * scale);
-        const frameCount = Math.max(30, Math.min(120, Math.round(video.duration * 24)));
+        // Native clip is 24fps. A 120-frame cap only kept ~12fps across this
+        // scroll, so the lotus stepped. 30fps with a higher cap tracks scroll.
+        plannedFrameCount = Math.max(48, Math.min(200, Math.round(video.duration * 30)));
+        const frameCount = plannedFrameCount;
 
         for (let i = 0; i < frameCount; i++) {
           if (!alive) break;
@@ -163,12 +194,15 @@ export default function ScrollExperience() {
             resizeHeight: scaledHeight,
           });
           bitmaps.push(bitmap);
+          schedulePaint();
         }
 
         if (alive && bitmaps.length > 0) {
           framesReady = true;
+          lastFrameIndex = -1;
           canvas.style.visibility = 'visible';
           if (videoEl) videoEl.style.display = 'none';
+          schedulePaint();
         }
         URL.revokeObjectURL(objectUrl);
       } catch {
@@ -209,9 +243,12 @@ export default function ScrollExperience() {
       if (videoEl) {
         const onSeeked = () => {
           videoSeeking = false;
+          schedulePaint();
         };
         const onStalled = () => {
           videoSeeking = false;
+          pendingSeekTarget = -1;
+          schedulePaint();
         };
         const onLoadedData = () => {
           videoEl.currentTime = 0;
@@ -228,9 +265,15 @@ export default function ScrollExperience() {
 
       if (canvas) canvas.style.visibility = 'hidden';
       resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-      cleanups.push(() => window.removeEventListener('resize', resizeCanvas));
-      rafIds.push(requestAnimationFrame(videoTick));
+      const onResize = () => {
+        resizeCanvas();
+        schedulePaint();
+      };
+      window.addEventListener('resize', onResize);
+      window.addEventListener('scroll', schedulePaint, { passive: true });
+      cleanups.push(() => window.removeEventListener('resize', onResize));
+      cleanups.push(() => window.removeEventListener('scroll', schedulePaint));
+      schedulePaint();
       void extractFrames();
     }
 
