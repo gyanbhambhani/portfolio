@@ -2,35 +2,23 @@
 
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import HomeSections from './HomeSections';
 
 const VIDEO_URL =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260616_212935_bbf608da-62d1-4f25-9be4-c346e4d09cc8.mp4';
 
-const cards = [
-  {
-    title: 'Engineering',
-    body: 'Founding engineer at EverCurrent, building agentic AI workflows for hardware manufacturing teams. Part of a16z Speedrun.',
-  },
-  {
-    title: 'Products',
-    body: 'Shipped tools across real estate, education, and fundraising — including StudyBase (2,000+ students) and Entrelink (~$500k raised).',
-  },
-  {
-    title: 'Focus',
-    body: 'Studying Business and Data Science at UC Berkeley. Working at the intersection of AI, product, and venture.',
-  },
+const stats = [
+  { value: '1.5M+', label: 'podcast views' },
+  { value: '2,000+', label: 'students on StudyBase' },
+  { value: '~$500k', label: 'raised by founders on Entrelink' },
+  { value: 'a16z', label: 'Speedrun 005' },
 ];
 
 export default function ScrollExperience() {
   const videoCanvasRef = useRef<HTMLCanvasElement>(null);
   const videoElRef = useRef<HTMLVideoElement>(null);
-  const particlesCanvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const fixedCardsRef = useRef<HTMLDivElement>(null);
-  const cardsGridRef = useRef<HTMLDivElement>(null);
-  const cardsTriggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let alive = true;
@@ -277,64 +265,6 @@ export default function ScrollExperience() {
       void extractFrames();
     }
 
-    // ===================== PARTICLES =====================
-    const pCanvas = particlesCanvasRef.current;
-    const pCtx = pCanvas?.getContext('2d') ?? null;
-    let particles: {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      opacity: number;
-    }[] = [];
-
-    const createParticles = () => {
-      if (!pCanvas) return;
-      particles = [];
-      const count = Math.floor((pCanvas.width * pCanvas.height) / 12000);
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * pCanvas.width,
-          y: Math.random() * pCanvas.height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size: Math.random() * 1.5 + 0.5,
-          opacity: Math.random() * 0.6 + 0.2,
-        });
-      }
-    };
-
-    const resizeParticles = () => {
-      if (!pCanvas) return;
-      pCanvas.width = window.innerWidth;
-      pCanvas.height = window.innerHeight;
-      createParticles();
-    };
-
-    const animateParticles = () => {
-      if (!alive || !pCanvas || !pCtx) return;
-      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = pCanvas.width;
-        if (p.x > pCanvas.width) p.x = 0;
-        if (p.y < 0) p.y = pCanvas.height;
-        if (p.y > pCanvas.height) p.y = 0;
-        pCtx.beginPath();
-        pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        pCtx.fillStyle = `rgba(255,255,255,${p.opacity})`;
-        pCtx.fill();
-      }
-      rafIds.push(requestAnimationFrame(animateParticles));
-    };
-
-    resizeParticles();
-    window.addEventListener('resize', resizeParticles);
-    cleanups.push(() => window.removeEventListener('resize', resizeParticles));
-    rafIds.push(requestAnimationFrame(animateParticles));
-
     // ===================== HERO FADE =====================
     const updateHeroOpacity = () => {
       const hero = heroRef.current;
@@ -344,46 +274,6 @@ export default function ScrollExperience() {
     };
     window.addEventListener('scroll', updateHeroOpacity, { passive: true });
     cleanups.push(() => window.removeEventListener('scroll', updateHeroOpacity));
-
-    // ===================== FIXED CARDS =====================
-    const tickCards = () => {
-      if (!alive) return;
-      const fixedCards = fixedCardsRef.current;
-      const cardsGrid = cardsGridRef.current;
-      const trigger = cardsTriggerRef.current;
-      if (fixedCards && cardsGrid && trigger) {
-        const rect = trigger.getBoundingClientRect();
-        const triggerTop = rect.top + window.scrollY;
-        const triggerHeight = rect.height;
-        const scrollY = window.scrollY;
-        const vh = window.innerHeight;
-
-        const start = triggerTop - vh * 0.5;
-        const end = triggerTop + triggerHeight - vh * 0.3;
-        const range = end - start;
-
-        let progress = range > 0 ? (scrollY - start) / range : 0;
-        progress = Math.max(0, Math.min(1, progress));
-
-        const isActive = scrollY >= start - vh * 0.2 && scrollY <= end + vh * 0.3;
-        const fadeIn = Math.min(1, Math.max(0, (scrollY - (start - vh * 0.2)) / (vh * 0.2)));
-        const fadeOut = Math.min(1, Math.max(0, (end + vh * 0.3 - scrollY) / (vh * 0.3)));
-        const containerOpacity = isActive ? Math.min(fadeIn, fadeOut) : 0;
-
-        fixedCards.style.opacity = String(containerOpacity);
-        fixedCards.style.pointerEvents = containerOpacity > 0.1 ? 'auto' : 'none';
-
-        const isMobile = window.innerWidth < 768;
-        const revealPct = progress * 130;
-        const mask = isMobile
-          ? `linear-gradient(to bottom, black ${revealPct}%, transparent ${revealPct + 20}%)`
-          : `linear-gradient(to right, black ${revealPct}%, transparent ${revealPct + 15}%)`;
-        cardsGrid.style.maskImage = mask;
-        cardsGrid.style.webkitMaskImage = mask;
-      }
-      rafIds.push(requestAnimationFrame(tickCards));
-    };
-    rafIds.push(requestAnimationFrame(tickCards));
 
     return () => {
       alive = false;
@@ -413,47 +303,16 @@ export default function ScrollExperience() {
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      {/* Particles */}
-      <canvas
-        ref={particlesCanvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none"
-        style={{ zIndex: 3 }}
-      />
-
-      {/* Fixed reveal cards */}
-      <div
-        ref={fixedCardsRef}
-        className="fixed bottom-0 left-0 right-0 px-6 md:px-10 py-8 opacity-0 pointer-events-none"
-        style={{ zIndex: 4 }}
-      >
-        <div
-          ref={cardsGridRef}
-          className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10"
-        >
-          {cards.map((card) => (
-            <div key={card.title}>
-              <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight">
-                {card.title}
-              </h3>
-              <p className="text-white/70 text-sm leading-relaxed">{card.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Scrolling content */}
       <div className="relative" style={{ zIndex: 2 }}>
         {/* Hero */}
-        <section ref={heroRef} className="relative h-screen w-full flex flex-col">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <section ref={heroRef} className="relative h-screen min-h-[640px] w-full flex flex-col">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
           <div className="relative z-10 flex-1 flex flex-col items-center justify-end
-            text-center px-6 pb-24">
-            <p className="text-white/50 text-sm tracking-[0.15em] uppercase mb-5">
-              Gyan Bhambhani
-            </p>
+            text-center px-6 pb-28">
             <h1
-              className="font-serif-display text-white leading-[1.12] max-w-3xl tracking-tight"
-              style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
+              className="hero-in font-serif-display text-white leading-[1.08] max-w-4xl tracking-tight"
+              style={{ animationDelay: '0.2s', fontSize: 'clamp(2.25rem, 7vw, 5.25rem)' }}
             >
               I build AI products that{' '}
               <span className="relative inline-block">
@@ -462,8 +321,18 @@ export default function ScrollExperience() {
               </span>
               .
             </h1>
+            <p
+              style={{ animationDelay: '0.4s' }}
+              className="hero-in text-white/70 text-base md:text-lg max-w-xl mt-5 leading-relaxed"
+            >
+              Founding engineer at an a16z-backed startup, studying at Haas. I take things from
+              first interview to real users, and real revenue.
+            </p>
 
-            <div className="flex items-center gap-3 mt-10 flex-col sm:flex-row justify-center">
+            <div
+              style={{ animationDelay: '0.55s' }}
+              className="hero-in flex items-center gap-3 mt-8 flex-col sm:flex-row justify-center"
+            >
               <Link
                 href="/projects"
                 className="inline-flex items-center gap-2 bg-white text-black font-medium
@@ -481,45 +350,23 @@ export default function ScrollExperience() {
                 gyanb@berkeley.edu
               </a>
             </div>
-          </div>
 
-          <div className="relative z-10 flex justify-center pb-8">
-            <ChevronDown size={24} className="text-white/40 animate-bounce" strokeWidth={2} />
-          </div>
-        </section>
-
-        {/* Spacer */}
-        <div style={{ height: '150vh' }} />
-
-        {/* Cards trigger zone */}
-        <div ref={cardsTriggerRef} style={{ height: '200vh' }} />
-
-        {/* Spacer */}
-        <div style={{ height: '100vh' }} />
-
-        {/* Finale */}
-        <section className="relative min-h-screen flex items-end justify-center px-6 md:px-10
-          pb-24 md:pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
-            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col items-center text-center"
-          >
-            <p className="text-white/60 text-sm tracking-[0.2em] uppercase mb-4">
-              Get in touch
-            </p>
-            <a
-              href="mailto:gyanb@berkeley.edu"
-              className="font-serif-display text-white hover:text-white/80 transition-colors
-                duration-150 tracking-tight"
-              style={{ fontSize: 'clamp(2rem, 7vw, 4.5rem)' }}
+            <dl
+              style={{ animationDelay: '0.8s' }}
+              className="hero-in hidden md:grid grid-cols-4 gap-10 mt-12 pt-6 border-t border-white/15 w-full max-w-3xl"
             >
-              gyanb@berkeley.edu
-            </a>
-          </motion.div>
+              {stats.map((s) => (
+                <div key={s.label} className="text-left">
+                  <dt className="font-serif-display text-white text-3xl tracking-tight">{s.value}</dt>
+                  <dd className="text-white/45 text-[11px] uppercase tracking-[0.15em] mt-1">{s.label}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
         </section>
+
+        <HomeSections />
       </div>
     </>
   );
