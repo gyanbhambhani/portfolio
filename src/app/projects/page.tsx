@@ -7,7 +7,7 @@ import { projects } from '@/lib/data';
 
 export default function ProjectsPage() {
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen">
       <div className="max-w-6xl mx-auto px-6 pt-40 pb-24">
 
         <Reveal>
@@ -38,6 +38,17 @@ export default function ProjectsPage() {
                       </span>
                       <span className="text-white/30 text-xs tabular-nums">{project.year}</span>
                     </div>
+
+                    {project.metric && (
+                      <p className="font-serif-display text-4xl text-white tracking-tight leading-none mb-1">
+                        {project.metric.value}
+                      </p>
+                    )}
+                    {project.metric && (
+                      <p className="text-white/40 text-[10px] uppercase tracking-[0.15em] mb-6">
+                        {project.metric.label}
+                      </p>
+                    )}
 
                     <h2 className="font-serif-display text-2xl md:text-3xl text-white
                       mb-3 tracking-tight leading-tight">

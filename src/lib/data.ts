@@ -8,6 +8,7 @@ export interface Project {
   tech: string[];
   url?: string;
   year: string;
+  metric?: { value: string; label: string };
 }
 
 export interface WorkExperience {
@@ -41,6 +42,7 @@ export const projects: Project[] = [
       and semantic memory pipelines.`,
     tech: ['FastAPI', 'GraphQL', 'PostgreSQL', 'TypeScript', 'OpenAI', 'FAISS', 'Weaviate'],
     year: '2025',
+    metric: { value: 'a16z', label: 'Speedrun 005' },
   },
   {
     slug: 'rltr',
@@ -55,6 +57,7 @@ export const projects: Project[] = [
     tech: ['React', 'TypeScript', 'Supabase', 'MCP'],
     url: 'https://mano.network',
     year: '2025',
+    metric: { value: '700+', label: 'agent pilot, Berkshire Hathaway' },
   },
   {
     slug: 'tickeriq',
@@ -67,6 +70,7 @@ export const projects: Project[] = [
       wasn't the model - it was the discipline to follow it when it felt wrong.`,
     tech: ['OpenAI Agent SDK', 'Firecrawl', 'React', 'Python'],
     year: '2025',
+    metric: { value: '12–15%', label: 'alpha, Sharpe 1.4+' },
   },
   {
     slug: 'studybase',
@@ -80,6 +84,7 @@ export const projects: Project[] = [
     tech: ['OpenAI SDK', 'Firestore', 'Vector Embeddings', 'React'],
     url: 'https://cal-study-base.vercel.app',
     year: '2025',
+    metric: { value: '2,000+', label: 'students served' },
   },
   {
     slug: 'entrelink',
@@ -88,11 +93,12 @@ export const projects: Project[] = [
     description: 'Algorithmic fundraising platform matching founders with relevant investors.',
     why: `Fundraising is broken. Founders spend months on cold outreach when the right 
       investor might be two intros away. Built this to fix the matching problem.`,
-    learned: `Powered 10,000+ matches with verifiable fundraising outcomes (~$500k raised). 
+    learned: `Powered 10,000+ matches, and founders on the platform raised ~$500k. 
       Learned that data quality matters more than model sophistication.`,
     tech: ['Firebase', 'TypeScript', 'React', 'FastAPI', 'OpenAI'],
     url: 'https://entrelink.us',
     year: '2024',
+    metric: { value: '~$500k', label: 'raised by founders on the platform' },
   },
   {
     slug: 'fundless',
@@ -105,6 +111,7 @@ export const projects: Project[] = [
       create value without capital.`,
     tech: ['Next.js', 'Vercel'],
     year: '2025',
+    metric: { value: 'Memos', label: 'on people, not companies' },
   },
   {
     slug: 'podcast',
@@ -118,6 +125,7 @@ export const projects: Project[] = [
     tech: ['Content', 'Community'],
     url: 'https://www.youtube.com/@entrepreneurshipinsights',
     year: '2021',
+    metric: { value: '1.5M+', label: 'views' },
   },
 ];
 

@@ -4,7 +4,7 @@ import { Reveal } from '@/components/Motion';
 
 export default function WritingPage() {
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen">
       <div className="max-w-4xl mx-auto px-6 pt-40 pb-24">
 
         <Reveal>
