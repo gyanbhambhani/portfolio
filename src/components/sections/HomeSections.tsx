@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react';
-import { projects, workExperiences, about } from '@/lib/data';
+import { projects, workExperiences } from '@/lib/data';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -14,9 +15,79 @@ const fade = {
   transition: { duration: 0.8, ease },
 };
 
-const featured = ['evercurrent', 'rltr', 'entrelink', 'studybase']
+const rows = ['evercurrent', 'rltr', 'entrelink', 'studybase', 'tickeriq', 'podcast']
   .map((slug) => projects.find((p) => p.slug === slug)!)
   .filter(Boolean);
+
+const displayName: Record<string, string> = { podcast: 'Entrepreneurship Insights' };
+const pad = (n: number) => String(n).padStart(2, '0');
+
+/** Big serif rows. Hovering one dims the rest and shows its detail in the side panel. */
+function ProjectList() {
+  const [active, setActive] = useState(rows[0].slug);
+  const current = rows.find((p) => p.slug === active) ?? rows[0];
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-x-16">
+      <ul className="group/list border-t border-white/15">
+        {rows.map((p, i) => (
+          <li key={p.slug} className="swarm-reveal border-b border-white/15">
+            <Link
+              href={`/projects/${p.slug}`}
+              onMouseEnter={() => setActive(p.slug)}
+              onFocus={() => setActive(p.slug)}
+              className="group/row flex items-baseline gap-4 md:gap-6 py-5 md:py-6 transition-opacity
+                duration-300 group-hover/list:opacity-30 hover:!opacity-100 focus-visible:!opacity-100"
+            >
+              <span className="w-7 shrink-0 text-white/35 text-xs tabular-nums">{pad(i + 1)}</span>
+              <span
+                className="flex-1 font-serif-display text-white tracking-tight leading-none
+                  transition-transform duration-300 group-hover/row:translate-x-2"
+                style={{ fontSize: 'clamp(1.75rem, 4vw, 3.25rem)' }}
+              >
+                {displayName[p.slug] ?? p.title}
+              </span>
+              {p.metric && (
+                <span className="lg:hidden text-white/50 text-xs tabular-nums whitespace-nowrap">
+                  {p.metric.value}
+                </span>
+              )}
+              <span className="hidden sm:block text-white/40 text-xs tabular-nums">{p.year}</span>
+              <ArrowUpRight
+                size={18}
+                strokeWidth={1.75}
+                className="text-white/40 transition-all duration-300 group-hover/row:text-white
+                  group-hover/row:translate-x-0.5 group-hover/row:-translate-y-0.5 shrink-0 self-center"
+              />
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <aside className="hidden lg:block">
+        <div key={current.slug} className="sticky top-32 pt-8 animate-fade-in">
+          {current.metric && (
+            <>
+              <p
+                className="font-serif-display text-white tracking-tight leading-none mb-3"
+                style={{ fontSize: 'clamp(4rem, 7vw, 6rem)' }}
+              >
+                {current.metric.value}
+              </p>
+              <p className="text-white/50 text-xs uppercase tracking-[0.15em] mb-8">
+                {current.metric.label}
+              </p>
+            </>
+          )}
+          <p className="text-white/75 text-base leading-relaxed mb-6">{current.description}</p>
+          <p className="text-white/40 text-[11px] uppercase tracking-[0.15em] leading-relaxed">
+            {current.tech.join(' · ')}
+          </p>
+        </div>
+      </aside>
+    </div>
+  );
+}
 
 function SectionHead({ index, title, href, cta }: { index: string; title: string; href?: string; cta?: string }) {
   return (
@@ -24,7 +95,8 @@ function SectionHead({ index, title, href, cta }: { index: string; title: string
       <div>
         <p className="text-white/50 text-xs tracking-[0.25em] uppercase mb-4 tabular-nums">{index}</p>
         <h2
-          className="font-serif-display text-white tracking-tight leading-[1.05]"
+          data-swarm="heading"
+          className="swarm-reveal font-serif-display text-white tracking-tight leading-[1.05]"
           style={{ fontSize: 'clamp(2.25rem, 5.5vw, 4rem)' }}
         >
           {title}
@@ -57,57 +129,7 @@ export default function HomeSections() {
       <section id="work" className="max-w-6xl mx-auto px-6 md:px-10 pt-[24vh] pb-24 md:pb-32">
         <SectionHead index="01 / Selected work" title="Things that shipped." href="/projects" cta="All projects" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-          {featured.map((project, i) => (
-            <motion.div
-              key={project.slug}
-              {...fade}
-              transition={{ duration: 0.8, ease, delay: (i % 2) * 0.08 }}
-              className="h-full"
-            >
-              <Link
-                href={`/projects/${project.slug}`}
-                className="group liquid-glass block h-full rounded-3xl bg-black/40 backdrop-blur-xl
-                  p-7 md:p-9 transition-all duration-300 hover:bg-white/[0.06] hover:-translate-y-1
-                  active:scale-[0.99]"
-              >
-                <div className="flex items-start justify-between mb-10 md:mb-14">
-                  <span className="text-white/40 text-xs tabular-nums tracking-widest">
-                    {String(i + 1).padStart(2, '0')} · {project.year}
-                  </span>
-                  <span className="liquid-glass rounded-full p-2 text-white/70 group-hover:text-white
-                    group-hover:rotate-45 transition-all duration-300">
-                    <ArrowUpRight size={16} strokeWidth={1.75} />
-                  </span>
-                </div>
-
-                {project.metric && (
-                  <p
-                    className="font-serif-display text-white tracking-tight leading-none mb-2"
-                    style={{ fontSize: 'clamp(2.5rem, 5vw, 3.75rem)' }}
-                  >
-                    {project.metric.value}
-                  </p>
-                )}
-                {project.metric && (
-                  <p className="text-white/50 text-xs uppercase tracking-[0.15em] mb-8">
-                    {project.metric.label}
-                  </p>
-                )}
-
-                <h3 className="text-white text-xl md:text-2xl font-semibold tracking-tight mb-2">
-                  {project.title}
-                </h3>
-                <p className="text-white/65 text-sm md:text-base leading-relaxed mb-6">
-                  {project.description}
-                </p>
-                <p className="text-white/40 text-[10px] uppercase tracking-[0.15em] leading-relaxed">
-                  {project.tech.slice(0, 4).join(' · ')}
-                </p>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+        <ProjectList />
 
         <Link
           href="/projects"
@@ -121,70 +143,79 @@ export default function HomeSections() {
       <section className="max-w-6xl mx-auto px-6 md:px-10 pb-24 md:pb-32">
         <SectionHead index="02 / Now" title="Where I'm building." href="/work" cta="Full experience" />
 
-        <div className="border-t border-white/15">
-          {workExperiences.map((w, i) => (
-            <motion.div
-              key={w.company}
-              {...fade}
-              transition={{ duration: 0.7, ease, delay: i * 0.06 }}
-              className="grid grid-cols-1 md:grid-cols-[1fr_2fr_auto] gap-2 md:gap-10 py-8
-                border-b border-white/15 group"
-            >
-              <div>
-                <h3 className="font-serif-display text-white text-2xl md:text-3xl tracking-tight">
-                  {w.company}
-                </h3>
-                <p className="text-white/50 text-xs uppercase tracking-[0.15em] mt-2">{w.role}</p>
+        <ul className="group/list border-t border-white/15">
+          {workExperiences.map((w) => (
+            <li key={w.company} className="swarm-reveal border-b border-white/15">
+              <div
+                className="grid grid-cols-1 md:grid-cols-[1fr_2fr_auto] gap-2 md:gap-10 py-8 transition-opacity
+                  duration-300 group-hover/list:opacity-30 hover:!opacity-100"
+              >
+                <div>
+                  <h3
+                    className="font-serif-display text-white tracking-tight leading-none"
+                    style={{ fontSize: 'clamp(1.75rem, 3.4vw, 2.5rem)' }}
+                  >
+                    {w.company}
+                  </h3>
+                  <p className="text-white/50 text-xs uppercase tracking-[0.15em] mt-3">{w.role}</p>
+                </div>
+                <p className="text-white/70 text-sm md:text-base leading-relaxed max-w-xl">
+                  {w.highlights[0]}
+                </p>
+                <p className="text-white/40 text-xs uppercase tracking-[0.12em] md:text-right md:pt-2 whitespace-nowrap">
+                  {w.period}
+                </p>
               </div>
-              <p className="text-white/70 text-sm md:text-base leading-relaxed max-w-xl">
-                {w.highlights[0]}
-              </p>
-              <p className="text-white/40 text-xs uppercase tracking-[0.12em] md:text-right md:pt-2 whitespace-nowrap">
-                {w.period}
-              </p>
-            </motion.div>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       {/* ─────────── About ─────────── */}
       <section className="max-w-6xl mx-auto px-6 md:px-10 pb-24 md:pb-32">
-        <motion.div
-          {...fade}
-          className="liquid-glass rounded-[2rem] bg-black/40 backdrop-blur-xl p-8 md:p-14
+        <div
+          className="border-t border-white/15 pt-10 md:pt-14
             grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-10 md:gap-16"
         >
           <div>
             <p className="text-white/50 text-xs tracking-[0.25em] uppercase mb-5 tabular-nums">03 / About</p>
             <h2
-              className="font-serif-display text-white tracking-tight leading-[1.1] mb-6"
+              data-swarm="heading"
+              className="swarm-reveal font-serif-display text-white tracking-tight leading-[1.1] mb-6"
               style={{ fontSize: 'clamp(1.9rem, 4vw, 3rem)' }}
             >
-              I don&apos;t wait for permission. When something should exist, I build it.
+              Hey, I&apos;m Gyan.
             </h2>
-            <p className="text-white/65 text-base leading-relaxed mb-8 max-w-xl">
-              Berkeley Haas + Data Science, class of {about.education.graduation}. Started a podcast in high school
-              that hit 1.5M views, became the youngest realtor in the Bay Area, and now build AI tools for hardware
-              teams and agents.
-            </p>
+            <div className="swarm-reveal text-white/70 text-base leading-relaxed mb-8 max-w-xl space-y-4">
+              <p>
+                I&apos;m studying business and data science at Berkeley. I started making things in high school with a
+                podcast that ended up at 1.5M views, and I haven&apos;t really stopped since.
+              </p>
+              <p>
+                Right now I&apos;m a founding engineer at EverCurrent, building AI for hardware teams. I&apos;m also
+                working on a tool for real estate agents, since I&apos;m a licensed one myself.
+              </p>
+            </div>
             <Link
               href="/about"
-              className="inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white
+              className="swarm-reveal inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white
                 transition-colors duration-150"
             >
               More about me <ArrowUpRight size={16} strokeWidth={1.75} />
             </Link>
           </div>
 
-          <ul className="space-y-4 self-end">
-            {about.interests.map((interest, i) => (
-              <li key={i} className="flex gap-4 items-baseline text-sm text-white/70 leading-relaxed">
-                <span className="text-white/35 text-xs tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                {interest}
-              </li>
-            ))}
-          </ul>
-        </motion.div>
+          <div className="swarm-reveal self-end">
+            <p className="text-white/40 text-xs tracking-[0.2em] uppercase mb-4">Outside of work</p>
+            <ul className="space-y-2 text-sm text-white/70 leading-relaxed">
+              <li>I play six instruments</li>
+              <li>I train MMA</li>
+              <li>I do card magic</li>
+              <li>I like cars</li>
+              <li>I speak Hindi and some French</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* ─────────── Contact ─────────── */}
@@ -193,7 +224,8 @@ export default function HomeSections() {
           <p className="text-white/60 text-xs tracking-[0.25em] uppercase mb-5">Let&apos;s talk</p>
           <a
             href="mailto:gyanb@berkeley.edu"
-            className="font-serif-display text-white hover:text-white/75 transition-colors duration-150
+            data-swarm="contact"
+            className="swarm-reveal font-serif-display text-white hover:text-white/75 transition-colors duration-150
               tracking-tight break-all"
             style={{ fontSize: 'clamp(1.9rem, 7vw, 4.75rem)' }}
           >

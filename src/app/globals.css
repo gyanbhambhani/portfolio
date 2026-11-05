@@ -199,11 +199,22 @@
   to   { transform: translate3d(1.5%, 1.5%, 0) scale(1.06); }
 }
 
-.dock-in {
+/* Elements the star swarm builds: hidden until the stars arrive.
+   SwarmProbes adds .swarm-built (a JS fallback adds it too if the stars never reach an element
+   that's on screen). Animation, not transition, so it can't fight hover transitions. */
+.swarm-reveal {
   opacity: 0;
-  animation: dockIn 0.7s 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  filter: blur(8px);
 }
-@keyframes dockIn {
-  from { opacity: 0; transform: translateY(40px); }
-  to   { opacity: 1; transform: translateY(0); }
+.swarm-reveal.swarm-built {
+  opacity: 1;
+  filter: none;
+  animation: swarmIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@keyframes swarmIn {
+  from { opacity: 0; filter: blur(8px); }
+  to   { opacity: 1; filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swarm-reveal { opacity: 1; filter: none; }
 }

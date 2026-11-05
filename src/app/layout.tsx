@@ -3,6 +3,7 @@ import { Syne, EB_Garamond, DM_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Nav from "@/components/Nav";
 import SpaceBackground from "@/components/SpaceBackground";
+import SwarmProbes from "@/components/SwarmProbes";
 import "./globals.css";
 
 const syne = Syne({
@@ -44,6 +45,9 @@ export default function RootLayout({
       className={`${syne.variable} ${garamond.variable} ${dmMono.variable}`}
     >
       <head>
+        <noscript>
+          <style>{`.swarm-reveal{opacity:1!important;filter:none!important}`}</style>
+        </noscript>
         {/* Anti-flash script: sets .dark class before hydration to prevent flicker */}
         <script
           dangerouslySetInnerHTML={{
@@ -53,6 +57,7 @@ export default function RootLayout({
       </head>
       <body className="bg-black text-white antialiased">
         <SpaceBackground />
+        <SwarmProbes />
         <ThemeProvider>
           <Nav />
           {children}
