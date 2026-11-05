@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { bridge } from '@/lib/starBridge';
 
 interface Star {
   x: number;
@@ -10,6 +11,9 @@ interface Star {
   phase: number;
   speed: number;
   hue: number;
+  cx: number;
+  cy: number;
+  away: boolean;
 }
 
 interface Shooter {
@@ -57,7 +61,7 @@ export default function SpaceBackground() {
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.min(420, Math.floor((w * h) / 4200));
+      const count = Math.min(150, Math.max(40, Math.floor((w * h) / 11000)));
       stars = Array.from({ length: count }, () => {
         const depth = Math.pow(Math.random(), 2.2);
         return {
@@ -68,8 +72,12 @@ export default function SpaceBackground() {
           phase: Math.random() * Math.PI * 2,
           speed: 0.6 + Math.random() * 1.8,
           hue: Math.random() < 0.18 ? 215 : Math.random() < 0.1 ? 28 : 0,
+          cx: 0,
+          cy: 0,
+          away: false,
         };
       });
+      bridge.stars = stars;
     };
 
     const spawnShooter = () => {
@@ -100,6 +108,9 @@ export default function SpaceBackground() {
         const px = s.x - mx * 22 * s.depth;
         let py = (s.y - my * 22 * s.depth - scrollOff * 0.05 * s.depth) % h;
         if (py < 0) py += h;
+        s.cx = px;
+        s.cy = py;
+        if (s.away) continue;
         const a = (0.25 + s.depth * 0.75) * tw;
         ctx.beginPath();
         ctx.arc(px, py, s.r, 0, Math.PI * 2);
@@ -172,6 +183,7 @@ export default function SpaceBackground() {
 
     return () => {
       alive = false;
+      bridge.stars = [];
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onMove);

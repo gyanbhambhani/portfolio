@@ -311,8 +311,9 @@ export default function ScrollExperience() {
           <div className="relative z-10 flex-1 flex flex-col items-center justify-end
             text-center px-6 pb-28">
             <h1
-              className="hero-in font-serif-display text-white leading-[1.08] max-w-4xl tracking-tight"
-              style={{ animationDelay: '0.2s', fontSize: 'clamp(2.25rem, 7vw, 5.25rem)' }}
+              data-swarm="headline"
+              className="swarm-reveal font-serif-display text-white leading-[1.08] max-w-4xl tracking-tight"
+              style={{ fontSize: 'clamp(2.25rem, 7vw, 5.25rem)' }}
             >
               I build AI products that{' '}
               <span className="relative inline-block">
@@ -322,16 +323,14 @@ export default function ScrollExperience() {
               .
             </h1>
             <p
-              style={{ animationDelay: '0.4s' }}
-              className="hero-in text-white/70 text-base md:text-lg max-w-xl mt-5 leading-relaxed"
+              className="swarm-reveal text-white/70 text-base md:text-lg max-w-xl mt-5 leading-relaxed"
             >
               Founding engineer at an a16z-backed startup, studying at Haas. I take things from
               first interview to real users, and real revenue.
             </p>
 
             <div
-              style={{ animationDelay: '0.55s' }}
-              className="hero-in flex items-center gap-3 mt-8 flex-col sm:flex-row justify-center"
+              className="swarm-reveal flex items-center gap-3 mt-8 flex-col sm:flex-row justify-center"
             >
               <Link
                 href="/projects"
@@ -352,8 +351,7 @@ export default function ScrollExperience() {
             </div>
 
             <dl
-              style={{ animationDelay: '0.8s' }}
-              className="hero-in hidden md:grid grid-cols-4 gap-10 mt-12 pt-6 border-t border-white/15 w-full max-w-3xl"
+              className="swarm-reveal hidden md:grid grid-cols-4 gap-10 mt-12 pt-6 border-t border-white/15 w-full max-w-3xl"
             >
               {stats.map((s) => (
                 <div key={s.label} className="text-left">

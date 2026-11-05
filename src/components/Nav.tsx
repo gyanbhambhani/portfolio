@@ -115,12 +115,14 @@ export default function Nav() {
   return (
     <nav
       aria-label="Primary"
-      className="dock-in fixed bottom-4 md:bottom-6 inset-x-0 z-50 flex justify-center pointer-events-none px-3"
+      className="fixed bottom-4 md:bottom-6 inset-x-0 z-50 flex justify-center pointer-events-none px-3"
     >
       <div
         onMouseMove={(e) => mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className="pointer-events-auto origin-bottom scale-[0.84] sm:scale-100 flex items-end gap-1.5 md:gap-2 rounded-full px-2.5 py-2.5
+        data-swarm="dock"
+        data-swarm-radius="999"
+        className="swarm-reveal pointer-events-auto origin-bottom scale-[0.84] sm:scale-100 flex items-end gap-1.5 md:gap-2 rounded-full px-2.5 py-2.5
           bg-black/45 backdrop-blur-xl border border-white/15
           shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)]"
       >
